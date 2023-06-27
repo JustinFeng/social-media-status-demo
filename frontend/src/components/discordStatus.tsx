@@ -13,16 +13,16 @@ const DiscordStatus = () => {
     if (isAuthenticated && user?.sub?.includes(DISCORD)) {
       const checkDiscordStatus = async () => {
         const accessToken = await getAccessTokenSilently();
-        const res = await fetch('http://localhost:3006/check-discord', {
+        const res = await fetch('http://localhost:3005/utils/check-discord', {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            'x-pap-ac': accessToken
           },
         });
         const result = await res.json();
         setStatus(result.status);
-        if (result.inviteLink) {
-          setInviteLink(result.inviteLink);
-          setTimeout(checkDiscordStatus, 10_000)
+        if (result.cta) {
+          setInviteLink(result.cta);
+          setTimeout(checkDiscordStatus, 10_000);
         } else {
           setInviteLink('');
         }
